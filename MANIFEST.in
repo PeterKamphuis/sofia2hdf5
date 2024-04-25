@@ -1,0 +1,5 @@
+include package_name/bin/executable
+recursive-include package_name/ *.py
+recursive-include package_name/config *.py
+recursive-include package_name/common *.py
+recursive-include package_name/support *.py
