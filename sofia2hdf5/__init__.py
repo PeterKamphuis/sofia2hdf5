@@ -13,7 +13,7 @@ import subprocess
 def report_version():
     # Distutils standard  way to do version numbering
     try:
-        __version__ = version("package_name")
+        __version__ = version("sofia2hdf")
     except:
         __version__ = "dev"
     
