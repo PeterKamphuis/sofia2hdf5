@@ -76,10 +76,14 @@ class sofia_hdf5:
         self.mask_little_endian_dtype = self.mask_data.dtype.newbyteorder('L')
     def write_header(self,group,header):
         because_carta_thinks_they_know_better = ['HISTORY','COMMENT']
+        # If the string key words are not ascii 256 Carta will not 
+        # read them and refuses to initialize the coordinate system.
+        ascii_type = h5py.string_dtype('ascii', 256)
         for key in header: 
             if not key in because_carta_thinks_they_know_better:
                 if isinstance(header[key], str):
-                    group.attrs.create(key, f'{header[key]}')
+                    #group.attrs.create(key, f'{header[key]}')
+                    group.attrs[key] = np.array(f'{header[key]}',dtype=ascii_type )
                 elif isinstance(header[key], bool):
                     #because cannot inherit
                     if header[key]:
@@ -96,7 +100,7 @@ class sofia_hdf5:
             os.remove(self.hdf5name)
        
         with h5py.File(self.hdf5name, "w") as hdf5file:
-            cube_group = hdf5file.require_group('0')
+            cube_group = hdf5file.require_group('SoFiA')
             cube_group = self.write_header(cube_group,self.cube_header)
             
             cube_group.create_dataset('DATA', data=self.cube_data, \
@@ -105,15 +109,15 @@ class sofia_hdf5:
             #hdf5file.close()
     def write_mask(self):
         with h5py.File(self.hdf5name, "a") as hdf5file:
-            mask_group = hdf5file.require_group('1')
+            mask_group = hdf5file['SoFiA'].require_group('Mask')
             mask_group = self.write_header(mask_group,self.mask_header)
             
-            mask_group.create_dataset('MASK', data=self.mask_data, \
+            mask_group.create_dataset('DATA', data=self.mask_data, \
                     dtype=self.mask_little_endian_dtype, \
                     chunks= None)
     def write_catalog(self):
         with h5py.File(self.hdf5name, "a") as hdf5file:
-            catalog_group = hdf5file.require_group('Catalogue')
+            catalog_group = hdf5file['SoFiA'].require_group('Catalogue')
             catalog_group.attrs.create('type', self.catalog_type)
             catalog_group.attrs.create('name', self.catalog_name)
             head_done = False
