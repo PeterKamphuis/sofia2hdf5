@@ -130,3 +130,5 @@ dmypy.json
 # Visual code workspace project
 *.code-workspace
 
+#Mac
+.DS_Store

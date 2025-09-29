@@ -26,7 +26,7 @@ class defaults:
     sofia_catalog: Optional[str]  = None
     sofia_input: Optional[str]  = None
     configuration_file: Optional[str] = None
-    general: General = General()
+    general: General=field(default_factory=General)
 
 
 def setup_config(argv):
@@ -69,6 +69,7 @@ If you really want to use the maximum cpus set it from the command line with gen
     if cfg.sofia_input is None:
         cfg.sofia_input = input(f'''You have to provide the input to the sofia run: 
 sofia input=''')
-        
+    if cfg.general.directory[-1] != '/':
+        cfg.general.directory += '/'
     return cfg
         
