@@ -132,3 +132,4 @@ dmypy.json
 
 #Mac
 .DS_Store
+performance_test.csh
