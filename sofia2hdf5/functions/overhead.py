@@ -26,7 +26,8 @@ def convert(cfg):
 
 
     #the data of the cube
-    fits_data = get_fitsfile(working_directory,input_parameters)
+    print(cfg.general.directory)
+    fits_data = get_fitsfile(cfg.general.directory,input_parameters)
 
     print(f'We are adding the {input_parameters["input.data"]} to the file  {our_hdf5.hdf5name}') 
     our_hdf5.add_cube(fits_data)
